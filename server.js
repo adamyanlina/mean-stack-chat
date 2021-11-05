@@ -15,10 +15,18 @@ app.get('/', (req, res) => {
 });
 
 let userList = new Map();
+const users = [
+    { id: `Anna-${Math.floor((Math.random() * 100) + 1)}`, role: 'customer', fullName: 'Anna Karapetyan' },
+    { id: `Marry-${Math.floor((Math.random() * 100) + 1)}`, role: 'customer', fullName: 'Marry Ohanyan' },
+    { id: `Lilith-${Math.floor((Math.random() * 100) + 1)}`, role: 'seller', fullName: 'Lilith Papoyan' },
+    { id: `Karen-${Math.floor((Math.random() * 100) + 1)}`, role: 'customer', fullName: 'Karen Simonyan' },
+    { id: `David-${Math.floor((Math.random() * 100) + 1)}`, role: 'seller', fullName: 'David Aghayan' },
+];
 
 io.on('connection', (socket) => {
-    let userName = socket.handshake.query.userName;
-    addUser(userName, socket.id);
+    let senderId = socket.handshake.query.id;
+    console.log('current user id(senderId): ', senderId);
+    addUser(senderId, socket.id);
 
     // Broadcast for all connections
     socket.broadcast.emit('user-list', [...userList.keys()]);
@@ -27,10 +35,11 @@ io.on('connection', (socket) => {
     socket.emit('user-list', [...userList.keys()]);
 
     socket.on('message', (msg) => {
-        socket.broadcast.emit('message-broadcast', { message: msg, userName: userName });
+        socket.broadcast.emit('message-broadcast', { message: msg, senderId: senderId, recipientId: users[1].id });
     });
+
     socket.on('disconnect', (reason) => {
-        removeUser(userName, socket.id);
+        removeUser(senderId, socket.id);
     });
 });
 

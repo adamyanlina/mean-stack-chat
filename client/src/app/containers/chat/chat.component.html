@@ -1,6 +1,6 @@
 <div class="container">
   <h1>Competent programming - Chat App</h1>
-  <app-username (userNameEvent)="userNameUpdate($event)" *ngIf="!userName"></app-username>
+  <app-username (userEvent)="userUpdate($event)" *ngIf="!user.id"></app-username>
   <div class="chatbox">
     <div class="chatbox__user-list">
       <h2>User list</h2>
@@ -12,7 +12,7 @@
       <div class="chatbox__messages" *ngFor="let msg of messageList" [ngClass]="{mine: msg.mine}">
         <div class="user-message">
           <div class="message-box">
-            <p class="name">{{ msg.userName }}</p>
+            <p class="name">{{ msg.senderId }}</p>
             <br/>
             <p class="message">{{ msg.message }}</p>
           </div>

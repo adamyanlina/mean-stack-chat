@@ -1,5 +1,15 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
+enum UserRole {
+  Seller = 'seller',
+  Customer = 'customer'
+}
+type User = {
+  id: string;
+  role: UserRole,
+  fullName: string;
+}
+
 @Component({
   selector: 'app-username',
   templateUrl: './username.component.html',
@@ -7,14 +17,20 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 
 export class UsernameComponent {
-  @Output() userNameEvent = new EventEmitter<string>();
+  @Output() userEvent = new EventEmitter<string>();
 
-  userName = '';
+  user: User = {
+    id: '',
+    role: UserRole.Customer,
+    fullName: ''
+  };
 
   constructor() { }
 
-  setUserName(): void {
-    this.userNameEvent.emit(this.userName);
+  setUser(): void {
+    this.userEvent.emit(this.user.id);
+    const randomNumber = Math.floor((Math.random() * 100) + 1);
+    this.user.id = `${this.user.fullName.split(' ')[0]}-${randomNumber}`;
   }
 
 }
